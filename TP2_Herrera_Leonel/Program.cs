@@ -24,6 +24,7 @@ namespace TP2_Herrera_Leonel
             catch (Exception exception)
             {
                 //NLog: catch setup errors
+                logger.Error(exception, "Excepcion encontrada");
 
                 throw;
             }
@@ -36,10 +37,16 @@ namespace TP2_Herrera_Leonel
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                  Host.CreateDefaultBuilder(args)
+                      .ConfigureWebHostDefaults(webBuilder =>
+                      {
+                          webBuilder.UseStartup<Startup>();
+                      })
+                      .ConfigureLogging(logging =>
+                      {
+                          logging.ClearProviders();
+                          logging.SetMinimumLevel(LogLevel.Trace);
+                      })
+                      .UseNLog();  // NLog: Setup NLog for Dependency injection
     }
 }
